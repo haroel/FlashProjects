@@ -22,6 +22,7 @@
 		public var Text_errorlog:TextArea;
 		public var Text_output:TextArea;
 		
+		private var jsonObj:Object = null;
 		
 		public function MainView() {
 			// constructor code
@@ -30,9 +31,18 @@
 		}
 		public function enterFrameHandler(event:Event):void
 		{
+			var jsonLoader:URLLoader = new URLLoader();
+			jsonLoader.addEventListener(Event.COMPLETE, jsonLoaderComplete);
+			jsonLoader.load(new URLRequest("cc.json"));
 			
 			Button_send.addEventListener(MouseEvent.CLICK,clickHandler);
 		}
+
+		protected function jsonLoaderComplete(event:Event):void
+		{
+			jsonObj = JSON.parse(event.target.data);
+		}
+
 		public function clickHandler(event:MouseEvent):void
 		{
 			trace("click");
@@ -52,7 +62,7 @@
 				requestVars.errorlog = errorlog;
 			 
 			var request:URLRequest = new URLRequest();
-				request.url = "http://127.0.0.1:8080";
+				request.url = jsonObj.server;
 				request.method = URLRequestMethod.GET; 
 				request.data = requestVars;
 			 
@@ -79,12 +89,6 @@
 			function loaderCompleteHandler(e:Event):void
 			{
 				Text_output.text = e.target.data;
-				 var variables:URLVariables = new URLVariables( e.target.data );
-				if(variables.success)
-				{
-					
-					trace(variables.path);		
-				}
 			}
 			function httpStatusHandler (e:Event):void
 			{
