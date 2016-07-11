@@ -92,7 +92,7 @@
 			 
 			function loaderCompleteHandler(e:Event):void
 			{
-				Text_output.text = e.target.data;
+				Text_output.htmlText = e.target.data;
 			}
 			function httpStatusHandler (e:Event):void
 			{
